@@ -1,0 +1,58 @@
+syntax = "v1"
+
+info(
+	title: "wiki knogen 的数据 api 项目 更新版"
+	desc:  "数据处理+数据服务，一起处理的项目"
+	author: "ider"
+	email: "luhongfei@knogen.cn"
+	version: 1.0
+)
+
+type response {
+	Code    int         `json:"code"`
+	Message string      `json:"message,optional"`
+	Data    interface{} `json:"data,optional"`
+}
+
+type (
+	freshRequest {
+		Path string `path:"path"`
+		Key  string `path:"key"`
+		Data string `json:"data,optional"`
+	}
+
+	translateQuery {
+		Query []string `json:"query"`
+	}
+)
+
+@server(
+	group: translate
+	// prefix: api
+)
+service server-api {
+	@doc(
+		summary: put text in key
+		desc:  put text in key
+	)
+	@handler TranslateHandler
+	post /translate/zh(translateQuery) returns([]string)
+}
+
+@server(
+	group: fresh
+	// prefix: api
+)
+service server-api {
+	
+	@doc(
+		summary:  get text in key
+		desc:  get text in key
+	)
+	@handler freshPutHandler
+	put /fresh/:path/:key(freshRequest) returns(response)
+	
+	@handler freshGetHandler
+	get /fresh/:path/:key(freshRequest) returns(response)
+	
+}
