@@ -1,10 +1,16 @@
 package freshstorage
 
 import (
+	"errors"
 	"log"
+	"sync"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+)
+
+var (
+	queryLock sync.Mutex
 )
 
 func NewFreshStorage(postgresConn string) *FreshStorage {
@@ -39,4 +45,27 @@ func (c *FreshStorage) PutRecord(path, key, data string) *StorageBucket {
 	}
 	c.database.Create(&dataitem)
 	return &dataitem
+}
+
+func (c *FreshStorage) PutConsecutiveRecord(path, key string, ID uint, data string) (dataitem *StorageBucket, err error) {
+	// dataJSon, err := json.Marshal(data)
+	// if err != nil {
+	// 	log.Println("json Marshal error", err)
+	// }
+	dataitem = &StorageBucket{
+		Path: path,
+		Key:  key,
+		// Data: datatypes.JSON(dataJSon),
+		Data: data,
+	}
+
+	var sb StorageBucket
+	c.database.Where("path = ? AND key = ?", path, key).Last(&sb)
+	if ID == sb.ID {
+		c.database.Create(&dataitem)
+	} else {
+		err = errors.New("ID expired")
+	}
+
+	return
 }

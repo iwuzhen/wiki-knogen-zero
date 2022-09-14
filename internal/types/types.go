@@ -8,6 +8,7 @@ type Response struct {
 }
 
 type FreshRequest struct {
+	ID   uint   `json:"id,optional"`
 	Path string `path:"path"`
 	Key  string `path:"key"`
 	Data string `json:"data,optional"`

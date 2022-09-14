@@ -9,6 +9,16 @@ content-type: application/json
 
 ################
 
+POST  http://127.0.0.1:8888/fresh/testpath/testkey HTTP/1.1
+content-type: application/json
+
+{
+    "id": 6,
+    "data": "[1,2,3,41]"
+}
+
+################
+
 GET http://127.0.0.1:8888/fresh/testpath/testkey HTTP/1.1
 
 
@@ -20,3 +30,4 @@ content-type: application/json
 {
     "query": ["china","book","good"]
 }
+

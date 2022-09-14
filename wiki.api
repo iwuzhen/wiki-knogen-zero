@@ -16,6 +16,7 @@ type response {
 
 type (
 	freshRequest {
+		ID   uint   `json:"id,optional"`
 		Path string `path:"path"`
 		Key  string `path:"key"`
 		Data string `json:"data,optional"`
@@ -51,6 +52,10 @@ service server-api {
 	)
 	@handler freshPutHandler
 	put /fresh/:path/:key(freshRequest) returns(response)
+	
+	// consecutive put data
+	@handler freshPostHandler
+	post /fresh/:path/:key(freshRequest) returns(response)
 	
 	@handler freshGetHandler
 	get /fresh/:path/:key(freshRequest) returns(response)

@@ -27,7 +27,8 @@ func (l *FreshPutLogic) FreshPut(req *types.FreshRequest) (resp *types.Response,
 	// todo: add your logic here and delete this line
 	l.svcCtx.FreshS.PutRecord(req.Path, req.Key, req.Data)
 	resp = &types.Response{
-		Code: 200,
+		Code:    200,
+		Message: "ok",
 	}
 	return
 }

@@ -15,6 +15,11 @@ type FreshGetLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
+type dataSchema struct {
+	ID   uint        `json:"id"`
+	Data interface{} `json:"data"`
+}
+
 func NewFreshGetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FreshGetLogic {
 	return &FreshGetLogic{
 		Logger: logx.WithContext(ctx),
@@ -27,8 +32,9 @@ func (l *FreshGetLogic) FreshGet(req *types.FreshRequest) (resp *types.Response,
 	// todo: add your logic here and delete this line
 	ret := l.svcCtx.FreshS.GetLastestRecord(req.Path, req.Key)
 	resp = &types.Response{
-		Code: 200,
-		Data: ret.Data,
+		Code:    200,
+		Message: "ok",
+		Data:    dataSchema{ret.ID, ret.Data},
 	}
 	return
 }

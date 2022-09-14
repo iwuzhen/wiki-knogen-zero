@@ -16,3 +16,4 @@
 .env
 test.go
 /server-api.yaml
+test.http

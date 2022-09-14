@@ -30,6 +30,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: fresh.FreshPutHandler(serverCtx),
 			},
 			{
+				Method:  http.MethodPost,
+				Path:    "/fresh/:path/:key",
+				Handler: fresh.FreshPostHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodGet,
 				Path:    "/fresh/:path/:key",
 				Handler: fresh.FreshGetHandler(serverCtx),

@@ -10,7 +10,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func FreshGetHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FreshPostHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.FreshRequest
 		if err := httpx.Parse(r, &req); err != nil {
@@ -18,8 +18,8 @@ func FreshGetHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := fresh.NewFreshGetLogic(r.Context(), svcCtx)
-		resp, err := l.FreshGet(&req)
+		l := fresh.NewFreshPostLogic(r.Context(), svcCtx)
+		resp, err := l.FreshPost(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
