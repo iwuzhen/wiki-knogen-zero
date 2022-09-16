@@ -27,10 +27,11 @@ func (l *FreshPostLogic) FreshPost(req *types.FreshRequest) (resp *types.Respons
 	// todo: add your logic here and delete this line
 	// consecutive put
 
-	_, errE := l.svcCtx.FreshS.PutConsecutiveRecord(req.Path, req.Key, req.ID, req.Data)
+	ret, errE := l.svcCtx.FreshS.PutConsecutiveRecord(req.Path, req.Key, req.ID, req.Data)
 	resp = &types.Response{
 		Code:    200,
 		Message: "ok",
+		Data:    dataSchema{ID: ret.ID},
 	}
 	if errE != nil {
 		resp.Code = 412
