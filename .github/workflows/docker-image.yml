@@ -1,0 +1,39 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Login to ACR
+      uses: aliyun/acr-login@v1
+      with:
+        login-server: https://registry.cn-hangzhou.aliyuncs.com
+        username: "${{ secrets.REGISTRY_USERNAME }}"
+        password: "${{ secrets.REGISTRY_PASSWORD }}"
+    
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile --tag registry.cn-hangzhou.aliyuncs.com/ider001/wiki-knogen-zero:latest
+        docker push registry.cn-hangzhou.aliyuncs.com/ider001/wiki-knogen-zero:latest
+        
+    - name: deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd ~/project/wiki-knogen-zero
+          sudo docker-compose pull
+          sudo docker-compose up -d
